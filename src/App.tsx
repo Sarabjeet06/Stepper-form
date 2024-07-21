@@ -1,24 +1,47 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+import logo from "./logo.svg";
+import "./App.css";
+import Mainform from "./Components/Mainform";
+import {
+  createBrowserRouter,
+  createRoutesFromElements,
+  Route,
+  RouterProvider,
+} from "react-router-dom";
+import { Form, FormProvider, useForm } from "react-hook-form";
+import PersonalDetails from "./Components/PersonalDetails";
+import FamilyDetails from "./Components/FamilyDetails";
+import ProfileImage from "./Components/ProfileImage";
+import AddressDetails from "./Components/AddressDetails";
+import ReviewData from "./Components/ReviewData";
+import { DataProvider } from "./Context/FormContext";
 
 function App() {
+  const methods = useForm();
+  const router = createBrowserRouter(
+    createRoutesFromElements(
+      <Route path="/">
+        <Route path="" element={<Mainform />}></Route>
+        <Route
+          path="/personalDetails"
+          element={
+            <PersonalDetails key="" index={-1} heading="Personal Details" dataIndex={0} />
+          }
+        ></Route>
+        <Route path="/familyDetails" element={<FamilyDetails index={1} />}></Route>
+        <Route path="/addressDetails" element={<AddressDetails index={2} />}></Route>
+        <Route path="/profileImage" element={<ProfileImage index={3} />}></Route>
+        <Route path="/reviewDetails" element={<ReviewData />}></Route>
+      </Route>
+    )
+  );
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <FormProvider {...methods}>
+        <DataProvider>
+          <RouterProvider router={router} />
+        </DataProvider>
+      </FormProvider>
     </div>
   );
 }
