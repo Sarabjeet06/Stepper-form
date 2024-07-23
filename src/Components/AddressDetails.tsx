@@ -3,8 +3,10 @@ import Select from "./Select";
 import {
   Control,
   FieldArray,
+  FieldValue,
   Path,
   SubmitHandler,
+  useForm,
   useFormContext,
   UseFormRegister,
 } from "react-hook-form";
@@ -13,6 +15,7 @@ import InputController from "./InputController";
 import Input from "./Input";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { DataContext } from "../Context/FormContext";
+import { useMyForm } from "../Context/useMyForm";
 
 type AddressDetailProp = {
   index: number;
@@ -26,8 +29,9 @@ const AddressDetails: React.FC<AddressDetailProp> = ({ index }) => {
     label: string;
   };
 
-  const { register, control, watch, handleSubmit, formState } =
+  const {  control, watch } =
     useFormContext<FormData>();
+    const { register, formState, handleSubmit } = useForm<FormData>();
 
   const onSubmit: SubmitHandler<FormData> = (detail) => {
     // setData();
@@ -187,10 +191,10 @@ const AddressDetails: React.FC<AddressDetailProp> = ({ index }) => {
           }}
         />
         <Input
+          register={register}
           name="address.streetName"
           label="Enter StreetName"
-          type="text"
-          register={register}
+          type="text" 
           rules={{
             required: {
               value: true,

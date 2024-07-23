@@ -1,27 +1,18 @@
 import React from 'react'
-import { UseFormRegister, FieldError, RegisterOptions, FieldArray, Path, FieldErrors } from 'react-hook-form'
-import { FormData, PersonalData } from '../types/InputTypes'
-
-type Inputs = {
-    firstName: string,
-    lastName: string,
-    email: string,
-    phoneNumber: string,
-    fatherName: string,
-    motherName: string,
-    address: string,
-    country: string,
-    state: string,
-}
-
+import { UseFormRegister, FieldError, RegisterOptions, FieldArray, Path, FieldErrors, FieldValue, FieldValues } from 'react-hook-form'
+import { PersonalData } from '../types/InputTypes'
+ 
 
 // Generic
-interface InputType<T> {
+// FormData is not used here, use Form
+interface InputType<T extends FieldValues> {
     name:Path<T>,
     label: string,
-    register: UseFormRegister<FormData>,
+    register: UseFormRegister<T>,
     error?: FieldError,
     type:  React.HTMLInputTypeAttribute,
+
+    // change rules types to specific
     rules?: {
         required: {value: boolean, message: string};
         pattern?: { value: RegExp; message: string };
@@ -34,7 +25,7 @@ interface InputType<T> {
 
 // errorFunction
 
-const Input = ({ name , label, error, register, rules , type }: InputType<FormData> )=> {
+const Input = <T extends FieldValues>({ name , label, error, register, rules , type }: InputType<T> )=> {
     console.log(rules);
     if(error){
         console.log("yes error");

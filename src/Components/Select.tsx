@@ -24,7 +24,6 @@ const Select: React.FC<SelectProps> = ({options , control , name, placeholder, o
     const SelectRef=useRef<HTMLDivElement>(null);
     const [selectedOption , setSelectedOption]=useState<string|null>(null);
 
-
     const handleFilterOptions=()=>{
         const getOptions=options.filter(option=>
             option.label.toLowerCase().includes(searchTerm?.toLowerCase())
@@ -32,8 +31,6 @@ const Select: React.FC<SelectProps> = ({options , control , name, placeholder, o
         console.log(getOptions);
         setFilterOptions(getOptions);
     }
-
-    
 
     useEffect(()=>{
         console.log(searchTerm);

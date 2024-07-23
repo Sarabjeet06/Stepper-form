@@ -19,6 +19,7 @@ import ProfileImage from "./ProfileImage";
 import { useCustomForm } from "../CustomHooks/useCustomForm";
 import { Link } from "react-router-dom";
 import { DataContext } from "../Context/FormContext";
+import { useMyForm } from "../Context/useMyForm";
 
 // type MainFrameProps={
 //   finishClicked: boolean;
@@ -31,12 +32,10 @@ import { DataContext } from "../Context/FormContext";
 
 const Mainform: React.FC = () => {
   const {
-    register,
     control,
     watch,
-    handleSubmit,
-    formState,
   } = useFormContext<FormData>();
+  const { register, formState, handleSubmit } = useMyForm<FormData>();
   const {errors}=formState;
   console.log(control);
   const { fields, append, remove } = useFieldArray({

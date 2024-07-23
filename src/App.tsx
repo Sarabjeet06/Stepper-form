@@ -15,6 +15,7 @@ import ProfileImage from "./Components/ProfileImage";
 import AddressDetails from "./Components/AddressDetails";
 import ReviewData from "./Components/ReviewData";
 import { DataProvider } from "./Context/FormContext";
+import { MyFormProvider } from "./Context/useMyFormContext";
 
 function App() {
   const methods = useForm();
@@ -25,12 +26,26 @@ function App() {
         <Route
           path="/personalDetails"
           element={
-            <PersonalDetails key="" index={-1} heading="Personal Details" dataIndex={0} />
+            <PersonalDetails
+              key=""
+              index={-1}
+              heading="Personal Details"
+              dataIndex={0}
+            />
           }
         ></Route>
-        <Route path="/familyDetails" element={<FamilyDetails index={1} />}></Route>
-        <Route path="/addressDetails" element={<AddressDetails index={2} />}></Route>
-        <Route path="/profileImage" element={<ProfileImage index={3} />}></Route>
+        <Route
+          path="/familyDetails"
+          element={<FamilyDetails index={1} />}
+        ></Route>
+        <Route
+          path="/addressDetails"
+          element={<AddressDetails index={2} />}
+        ></Route>
+        <Route
+          path="/profileImage"
+          element={<ProfileImage index={3} />}
+        ></Route>
         <Route path="/reviewDetails" element={<ReviewData />}></Route>
       </Route>
     )
@@ -38,9 +53,11 @@ function App() {
   return (
     <div>
       <FormProvider {...methods}>
-        <DataProvider>
-          <RouterProvider router={router} />
-        </DataProvider>
+        <MyFormProvider>
+          <DataProvider>
+            <RouterProvider router={router} />
+          </DataProvider>
+        </MyFormProvider>
       </FormProvider>
     </div>
   );
