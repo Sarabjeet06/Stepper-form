@@ -4,16 +4,14 @@ import { useMyForm } from "./useMyForm";
 
 type ContextType = ReturnType<typeof useMyForm>;
 
-export const FormContext = createContext<ContextType | undefined>(undefined);
-
-export const useFormContext = () => {
-  const context = useContext(FormContext);
-  if (!context) {
-    throw new Error("useFormContext must be used within a FormProvider");
+export const FormContext = createContext<ContextType>(
+  {
+    register: () => ({ onChange: async () => false, onBlur: async () => false, ref: () => {}, value: "", name: "" }),
+    handleSubmit: () => () => {},
+    formState: { errors: {} },
+    watch: () => "",
   }
-  return context;
-};
-
+);
 
 interface PropsType {
   children?: React.ReactNode;

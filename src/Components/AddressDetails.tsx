@@ -16,6 +16,7 @@ import Input from "./Input";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { DataContext } from "../Context/FormContext";
 import { useMyForm } from "../Context/useMyForm";
+import { FormContext } from "../Context/useMyFormContext";
 
 type AddressDetailProp = {
   index: number;
@@ -23,15 +24,17 @@ type AddressDetailProp = {
 
 const AddressDetails: React.FC<AddressDetailProp> = ({ index }) => {
   const navigate = useNavigate();
-  const { data, setData } = useContext(DataContext);
+  const {data,setData } = useContext(DataContext);
   type Option = {
     id: number;
     label: string;
   };
 
-  const {  control, watch } =
-    useFormContext<FormData>();
-    const { register, formState, handleSubmit } = useForm<FormData>();
+  const { control, watch } = useFormContext<FormData>();
+  if (!FormContext) {
+    throw new Error("FormContext is not provided!"); // Handle case where context is not provided
+  }
+  const {register, formState, handleSubmit} = useContext(FormContext);
 
   const onSubmit: SubmitHandler<FormData> = (detail) => {
     // setData();
@@ -98,7 +101,7 @@ const AddressDetails: React.FC<AddressDetailProp> = ({ index }) => {
   };
 
   const countries = Object.keys(countryStates).map((country) => ({
-    value: country.toLowerCase(), 
+    value: country.toLowerCase(),
     label: country,
   }));
 
@@ -194,7 +197,7 @@ const AddressDetails: React.FC<AddressDetailProp> = ({ index }) => {
           register={register}
           name="address.streetName"
           label="Enter StreetName"
-          type="text" 
+          type="text"
           rules={{
             required: {
               value: true,
@@ -205,7 +208,7 @@ const AddressDetails: React.FC<AddressDetailProp> = ({ index }) => {
       </div>
       <div className="form-buttons">
         {location.pathname === "/addressDetails" && (
-          <button onClick={handleSubmit(onSubmit)}>Update</button>
+          <button type="submit" >Update</button>
         )}
       </div>
     </div>

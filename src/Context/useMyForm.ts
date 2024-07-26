@@ -1,6 +1,7 @@
 import { rejects } from "assert";
 import { resolve } from "path";
 import React, { useState } from "react";
+import { Path } from "react-hook-form";
 
 type FormValues = Record<string, any>;
 
@@ -26,13 +27,19 @@ type ValidationRules<Inputs> = Partial<
   >
 >;
 
+export type RegisterInputs<Inputs>={
+  name: keyof Inputs;
+  rules?: ValidationRules<Inputs>[keyof Inputs];
+}
 
-type RegisterReturnType<T> = {
+export type RegisterType<I>=(data:RegisterInputs<I>) => RegisterReturnType<I>
+
+export type RegisterReturnType<T> = {
   onChange: ChangeHandler;
   onBlur: ChangeHandler;
   ref: RefCallBack;
   value: string;
-  name: T; // make generic
+  name: keyof T; // make generic
   min?: string | number;
   max?: string | number;
   maxLength?: number;
@@ -41,6 +48,7 @@ type RegisterReturnType<T> = {
   required?: boolean;
   disabled?: boolean;
   // rules?: ValidationRules<T>[keyof T];
+  rules?: ValidationRules<T>[keyof T];
 }
 
 type Errors<k> = Partial<Record<keyof k, { message: string }>>;
@@ -65,7 +73,7 @@ export const useMyForm = <Inputs extends FormValues>({
 
       for (const name in values) {
         const value = values[name];
-        const fieldRules = register(name).rules || {};
+        const fieldRules = register({name}).rules || {};
         const error = validateInputs(value, fieldRules);
         if (error) {
           valid = false;
@@ -86,9 +94,9 @@ export const useMyForm = <Inputs extends FormValues>({
   };
 
   const register = (
-    name: keyof Inputs,
-    rules?: ValidationRules<Inputs>[keyof Inputs]
-  ):RegisterReturnType<keyof Inputs> => ({
+    {name,
+    rules
+  }:RegisterInputs<Inputs>):RegisterReturnType<Inputs> => ({
     name,
     onChange: (e: React.ChangeEvent<HTMLInputElement>) => {
       const { name, value } = e.target;
@@ -109,6 +117,23 @@ export const useMyForm = <Inputs extends FormValues>({
         }
       });
     },
+    onBlur: async (e: React.ChangeEvent<HTMLInputElement>) => {
+      const { name, value } = e.target;
+      const error = validateInputs(value, rules);
+
+      if (error) {
+        setErrors((prevErrors) => ({
+          ...prevErrors,
+          [name]: { message: error },
+        }));
+        return false;
+      } else {
+        const { [name]: temp, ...rest } = errors;
+        setErrors(rest as Errors<Inputs>);
+        return true;
+      }
+    },
+    ref: (instance: any) => {},
     value: values[name] || "",
     rules,
   });

@@ -50,7 +50,10 @@ export type FormData = PersonalData & {
 //     }
 //   }
 
-//   type AB = Nested['a']['b']
+//   type AB = Nested['a']['b']['c']
 
+//   type KeysOfB<T> = T extends { b: infer U } ? typeof(keyof U) : never;
 
-// familyMembers.1.firstName
+//   // Usage
+//   type KeysOfBInNested = KeysOfB<Nested['a']>; 
+// // familyMembers.1.firstName
