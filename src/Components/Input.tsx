@@ -8,17 +8,22 @@ import {
   FieldErrors,
   FieldValue,
   FieldValues,
+  UseFormGetValues,
 } from "react-hook-form";
 import { PersonalData } from "../types/InputTypes";
 import { RegisterInputs, RegisterReturnType, RegisterType } from "../Context/useMyForm";
 
 // Generic
 // FormData is not used here, use Form
+
+type ErrorType={
+  message: string,
+}
 interface InputType<T extends FieldValues> {
   name: Path<T>;
   label: string;
-  register: RegisterType<Path<T>>;
-  error?: FieldError;
+  register: ({ name, rules }: RegisterInputs<FieldValues>) => RegisterReturnType<FieldValues>
+  error?: ErrorType;
   type: React.HTMLInputTypeAttribute;
 
   // change rules types to specific

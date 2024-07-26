@@ -12,6 +12,7 @@ import { FormData, Inputs, PersonalData } from "../types/InputTypes";
 import Select from "./Select";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { DataContext } from "../Context/FormContext";
+import { FormContext } from "../Context/useMyFormContext";
 
 type RegisterType = FormData;
 
@@ -51,8 +52,8 @@ const PersonalDetails = <RType extends RegisterType>({
     console.log(data);
   };
 
-  const { register, formState, control, handleSubmit } =
-    useFormContext<FormData>();
+  const { control } = useFormContext<FormData>();
+  const { register, formState, handleSubmit } = useContext(FormContext);
   const location = useLocation();
   console.log(location);
 
